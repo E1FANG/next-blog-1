@@ -19,6 +19,5 @@ export const getPosts = async () => {
       id, title, date, content
     };
   });
-  console.log(posts);
   return posts;
 };
