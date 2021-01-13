@@ -1,17 +1,31 @@
-import jpg from '../assets/images/1.jpg'
+import {GetServerSideProps, NextPage} from 'next';
+import UAParser from 'ua-parser-js';
 
-console.log(jpg);
-export default function Home() {
+type Props = {
+  browser: {
+    name:string,
+    version:string,
+    major:string
+  }
+}
+
+const index:NextPage<Props>=(props) =>{
+  const {browser} = props
   return (
     <div>
-      <h1>标题</h1>
-      <p>段落</p>
-      <img src={jpg} alt=""/>
-      <style jsx>{`
-        h1 {
-          color: red;
-        }
-      `}</style>
+      <h1>你的浏览器是 {browser.name}</h1>
     </div>
-  );
+  )
+}
+
+export default index
+
+export const getServerSideProps:GetServerSideProps = async (context)=>{
+  const ua = context.req.headers['user-agent']
+  const result = new UAParser(ua).getResult()
+  return {
+    props:{
+      browser: result.browser
+    }
+  }
 }
